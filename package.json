@@ -1,0 +1,44 @@
+{
+  "name": "rte",
+  "version": "1.0.0",
+  "description": "React Terminal Engine - Terminal-based React rendering and debugging CLI",
+  "type": "module",
+  "main": "./dist/index.js",
+  "bin": {
+    "rte": "./dist/cli/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "react": "^18.2.0",
+    "react-reconciler": "^0.28.0",
+    "yoga-layout-prebuilt": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.2.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.4.0"
+  },
+  "keywords": [
+    "react",
+    "terminal",
+    "cli",
+    "rendering",
+    "debugging"
+  ],
+  "author": "",
+  "license": "MIT"
+}
