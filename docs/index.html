@@ -83,21 +83,36 @@
     }
 
     .logo {
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
       color: var(--text-primary);
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      letter-spacing: -0.02em;
     }
 
     .logo-mark {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 2px;
-      box-shadow: 0 0 12px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .logo-mark span {
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .logo-mark .bracket {
+      color: var(--text-dim);
+      font-weight: 400;
+    }
+
+    .logo-mark .letter {
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 15px;
     }
 
     nav {
@@ -600,7 +615,9 @@
   <header>
     <div class="container header-inner">
       <a href="index.html" class="logo">
-        <span class="logo-mark"></span>
+        <span class="logo-mark">
+          <span class="bracket">[</span><span class="letter">r</span><span class="bracket">]</span>
+        </span>
         rte
       </a>
       <nav>
