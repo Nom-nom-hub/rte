@@ -1,5 +1,5 @@
 {
-  "name": "rte",
+  "name": "@codeteck/rte",
   "version": "1.0.0",
   "description": "React Terminal Engine - Terminal-based React rendering and debugging CLI",
   "type": "module",
