@@ -1,4 +1,8 @@
-# React Terminal Engine (rte)
+# React Terminal Engine (RTE)
+
+<p align="center">
+  <img src="docs/rte-logo.svg" alt="React Terminal Engine Logo" width="300">
+</p>
 
 [![npm version](https://img.shields.io/npm/v/@codeteck/rte)](https://www.npmjs.com/package/@codeteck/rte)
 [![npm downloads](https://img.shields.io/npm/dm/@codeteck/rte)](https://www.npmjs.com/package/@codeteck/rte)
