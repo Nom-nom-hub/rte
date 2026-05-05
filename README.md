@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@codeteck/rte)](https://www.npmjs.com/package/@codeteck/rte)
 [![npm downloads](https://img.shields.io/npm/dm/@codeteck/rte)](https://www.npmjs.com/package/@codeteck/rte)
 [![node](https://img.shields.io/node/v/@codeteck/rte)](https://nodejs.org)
-[![license](https://img.shields.io/github/license/Nom-nom-hub/rte)](https://github.com/Nom-nom-hub/rte/blob/main/LICENSE)
+[![license: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Nom-nom-hub/rte/blob/main/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/Nom-nom-hub/rte)](https://github.com/Nom-nom-hub/rte)
 
 A terminal-based React rendering and debugging CLI that captures, replays, and compares React component render states in a deterministic environment.
