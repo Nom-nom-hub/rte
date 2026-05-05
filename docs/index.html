@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>rte - React Terminal Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-terminal: #0d1117;
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-muted: #484f58;
+      --accent-green: #3fb950;
+      --accent-blue: #58a6ff;
+      --accent-cyan: #39c5cf;
+      --accent-purple: #a371f7;
+      --accent-orange: #d29922;
+      --accent-red: #f85149;
+      --glow-green: rgba(63, 185, 80, 0.15);
+      --glow-blue: rgba(88, 166, 255, 0.15);
+      --border: #21262d;
+      --terminal-glow: 0 0 40px rgba(57, 197, 207, 0.08);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(57, 197, 207, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(163, 113, 247, 0.05), transparent);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent-cyan);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--accent-cyan);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 4rem 0 3rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-tagline {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Install command */
+    .install-box {
+      background: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--terminal-glow);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .install-box:hover {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(57, 197, 207, 0.2);
+    }
+
+    .install-box .prompt {
+      color: var(--accent-cyan);
+    }
+
+    .install-box .command {
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .install-box .copy-hint {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+    }
+
+    .hero-secondary {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Terminal Demo */
+    .demo-section {
+      padding: 2rem 0;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .terminal-window {
+      background: var(--bg-terminal);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--terminal-glow);
+    }
+
+    .terminal-header {
+      background: var(--bg-secondary);
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+
+    .terminal-title {
+      margin-left: 0.75rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .terminal-body {
+      padding: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.7;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-prompt {
+      color: var(--accent-cyan);
+      flex-shrink: 0;
+    }
+
+    .terminal-output {
+      color: var(--text-secondary);
+    }
+
+    .output-green { color: var(--accent-green); }
+    .output-blue { color: var(--accent-blue); }
+    .output-purple { color: var(--accent-purple); }
+    .output-orange { color: var(--accent-orange); }
+    .output-red { color: var(--accent-red); }
+    .output-dim { color: var(--text-muted); }
+
+    /* Features */
+    .features {
+      padding: 3rem 0;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .feature-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Commands */
+    .commands-section {
+      padding: 2rem 0 3rem;
+    }
+
+    .commands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .command-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .command-card .cmd {
+      color: var(--accent-green);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .command-card .desc {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* Why section */
+    .why-section {
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .why-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .why-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      color: var(--accent-purple);
+      margin-bottom: 1rem;
+    }
+
+    .why-text {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      nav {
+        display: none;
+      }
+
+      .hero {
+        padding: 3rem 0 2rem;
+      }
+
+      .terminal-body {
+        font-size: 0.7rem;
+        padding: 0.75rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">
+          <span class="logo-dot"></span>
+          rte
+        </a>
+        <nav>
+          <a href="https://github.com/Nom-nom-hub/rte">GitHub</a>
+          <a href="https://www.npmjs.com/package/@codeteck/rte">npm</a>
+          <a href="./docs/cli.html">Docs</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>rte</h1>
+        <p class="hero-tagline">Deterministic React rendering in the terminal</p>
+        
+        <div class="install-box" onclick="copyInstall()">
+          <span class="prompt">$</span>
+          <span class="command">npm install -g @codeteck/rte</span>
+          <span class="copy-hint">click to copy</span>
+        </div>
+        
+        <p class="hero-secondary">
+          or use directly: <code style="color: var(--accent-cyan);">npx @codeteck/rte dev</code>
+        </p>
+      </div>
+    </section>
+
+    <section class="demo-section">
+      <div class="container">
+        <h2 class="section-title">// What it looks like</h2>
+        
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot dot-red"></span>
+            <span class="terminal-dot dot-yellow"></span>
+            <span class="terminal-dot dot-green"></span>
+            <span class="terminal-title">rte — bash</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span class="terminal-output"><span class="output-green">rte</span> dev examples/counter.tsx</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-dim">React Terminal Engine - Debug Mode</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-dim">Frames: 12 | Components: 3 | State: 2</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-blue">┌─ Counter ───────────────────</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-blue">│  Count: 0                  │</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-blue">└─────────────────────────────</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt">$</span>
+              <span class="terminal-output"><span class="output-green">rte</span> benchmark --scenario small</span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-dim">🧪 Running small benchmark...</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output">Render: <span class="output-green">21ms avg</span> | FPS: <span class="output-green">24.3</span> | Memory: <span class="output-green">12MB</span></span>
+            </div>
+            <div class="terminal-line">
+              <span class="terminal-prompt"></span>
+              <span class="terminal-output"><span class="output-green">✅ All performance thresholds passed!</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="container">
+        <h2 class="section-title">// Features</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">Deterministic rendering</h3>
+            <p class="feature-desc">Same input → same output. Every render is reproducible.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⏪</div>
+            <h3 class="feature-title">Time-travel replay</h3>
+            <p class="feature-desc">Walk through render history frame-by-frame.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3 class="feature-title">CLI diff & debugging</h3>
+            <p class="feature-desc">Compare sessions to find divergence instantly.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Performance benchmarking</h3>
+            <p class="feature-desc">Measure render times, memory, FPS in terminal.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎬</div>
+            <h3 class="feature-title">Frame-based execution</h3>
+            <p class="feature-desc">Capture every render state as a snapshot.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="commands-section">
+      <div class="container">
+        <h2 class="section-title">// Commands</h2>
+        <div class="commands-grid">
+          <div class="command-card">
+            <div class="cmd">rte dev &lt;file&gt;</div>
+            <div class="desc">Run with debug panel</div>
+          </div>
+          <div class="command-card">
+            <div class="cmd">rte replay &lt;file&gt;</div>
+            <div class="desc">Replay session</div>
+          </div>
+          <div class="command-card">
+            <div class="cmd">rte diff &lt;a&gt; &lt;b&gt;</div>
+            <div class="desc">Compare sessions</div>
+          </div>
+          <div class="command-card">
+            <div class="cmd">rte benchmark</div>
+            <div class="desc">Run benchmarks</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-section">
+      <div class="container">
+        <div class="why-box">
+          <h3 class="why-title">// Why this exists</h3>
+          <p class="why-text">Built for debugging and understanding React-style UI execution in the terminal with deterministic replay and causality tracking.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/Nom-nom-hub/rte">GitHub</a>
+        <a href="https://www.npmjs.com/package/@codeteck/rte">npm</a>
+        <a href="./docs/cli.html">Documentation</a>
+      </div>
+      <p class="footer-copy">MIT License © 2026 codeteck</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstall() {
+      navigator.clipboard.writeText('npm install -g @codeteck/rte');
+    }
+  </script>
+</body>
+</html>
