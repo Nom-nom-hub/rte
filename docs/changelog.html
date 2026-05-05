@@ -50,10 +50,9 @@
     }
     .header-inner { display: flex; justify-content: space-between; align-items: center; height: 64px; }
     .logo { font-size: 16px; font-weight: 600; color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em; }
-    .logo-mark { display: flex; align-items: center; gap: 2px; }
-    .logo-mark span { font-size: 14px; color: var(--accent); }
+    .logo-mark { display: flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: -0.02em; }
     .logo-mark .bracket { color: var(--text-dim); font-weight: 400; }
-    .logo-mark .letter { color: var(--text-primary); font-weight: 700; font-size: 15px; }
+    .logo-mark .letters { color: var(--text-primary); font-weight: 700; background: linear-gradient(90deg, var(--text-primary) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     nav { display: flex; gap: 32px; }
     nav a { color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
     nav a:hover { color: var(--text-primary); }
@@ -90,7 +89,7 @@
 <body>
   <header>
     <div class="container header-inner">
-      <a href="index.html" class="logo"><span class="logo-mark"><span class="bracket">[</span><span class="letter">r</span><span class="bracket">]</span></span></a>
+      <a href="index.html" class="logo"><span class="logo-mark"><span class="bracket">[</span><span class="letters">rte</span><span class="bracket">]</span></span></a>
       <nav>
         <a href="cli.html">CLI Reference</a>
         <a href="architecture.html">Architecture</a>

@@ -96,12 +96,9 @@
     .logo-mark {
       display: flex;
       align-items: center;
-      gap: 2px;
-    }
-
-    .logo-mark span {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 14px;
-      color: var(--accent);
+      letter-spacing: -0.02em;
     }
 
     .logo-mark .bracket {
@@ -109,10 +106,13 @@
       font-weight: 400;
     }
 
-    .logo-mark .letter {
+    .logo-mark .letters {
       color: var(--text-primary);
       font-weight: 700;
-      font-size: 15px;
+      background: linear-gradient(90deg, var(--text-primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     nav {
@@ -616,7 +616,7 @@
     <div class="container header-inner">
       <a href="index.html" class="logo">
         <span class="logo-mark">
-          <span class="bracket">[</span><span class="letter">r</span><span class="bracket">]</span>
+          <span class="bracket">[</span><span class="letters">rte</span><span class="bracket">]</span>
         </span>
       </a>
       <nav>
