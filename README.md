@@ -1,35 +1,78 @@
 # React Terminal Engine (rte)
 
-Terminal-based React rendering and debugging CLI tool.
+A terminal-based React rendering and debugging CLI that captures, replays, and compares React component render states in a deterministic environment.
 
-## Install
+## Why rte?
+
+React debugging in terminals is difficult. rte provides:
+- **Deterministic rendering** - Same input always produces same output
+- **Frame capture** - Record every render state as a frame
+- **Session replay** - Walk through render history frame-by-frame
+- **Diff comparison** - Compare two sessions to find divergence
+- **Benchmarking** - Measure render performance in terminal
+
+## Installation
 
 ```bash
-npm install -g rte
+npm install -g @codeteck/rte
 ```
 
-## Usage
+Or use without installing:
+```bash
+npx @codeteck/rte --version
+npm exec @codeteck/rte -- benchmark
+```
+
+## Quick Start
 
 ```bash
-rte dev <file>          # Run a React file with debug panel
-rte replay <session>     # Replay a recorded session
-rte diff <a> <b>        # Compare two session files
-rte verify <snapshot> # Verify app state against snapshot
-rte benchmark           # Run performance benchmark
+# Run a React file with debug panel
+rte dev examples/counter.tsx
+
+# Record a session, then replay it
+rte replay session.json
+
+# Compare two sessions
+rte diff session-a.json session-b.json
+
+# Run performance benchmark
+rte benchmark
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `rte dev <file>` | Run React file with debug panel |
-| `rte replay <session>` | Replay recorded session |
-| `rte diff <a> <b>` | Compare two sessions |
-| `rte verify <file>` | CI mode verification |
-| `rte benchmark` | Run performance tests |
+| `rte dev <file>` | Run a React file with interactive debug panel |
+| `rte replay <file>` | Replay a recorded session with frame stepping |
+| `rte diff <fileA> <fileB>` | Compare two session files and find divergence |
+| `rte verify <file>` | Verify current app state against snapshot (CI mode) |
+| `rte benchmark` | Run performance benchmark (default: small) |
 
 ## Options
 
-- `rte dev --save-session` - Save session to `.rte/sessions/`
-- `rte diff --visual` - Show visual side-by-side comparison
-- `rte benchmark --scenario stress` - Run stress test
+| Command | Options |
+|---------|---------|
+| `rte dev` | `-p, --port <port>` API server port, `-s, --save-session` Save session |
+| `rte replay` | `-i, --interactive` Interactive keyboard controls |
+| `rte diff` | `-v, --visual` Visual side-by-side, `-j, --json` JSON output, `-s, --summary-only` Summary only |
+| `rte verify` | `-g, --generate` Generate hash, `-e, --entry <file>` Entry file |
+| `rte benchmark` | `-s, --scenario` Scenario: small, medium, large, stress, stress-large-tree |
+
+## Debug Mode
+
+Enable stack traces and internal error details:
+```bash
+rte --debug dev myfile.tsx
+```
+
+## Examples
+
+See `examples/` directory:
+- `counter.tsx` - Simple counter component
+- `basic.tsx` - Basic layout example
+
+## Links
+
+- GitHub: https://github.com/Nom-nom-hub/rte
+- npm: https://www.npmjs.com/package/@codeteck/rte
