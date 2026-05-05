@@ -154,9 +154,108 @@
       background: var(--bg-terminal);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 24px;
+      padding: 0;
       text-align: left;
       position: relative;
+      overflow: hidden;
+    }
+
+    .hero-terminal {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .terminal-window-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-elevation);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-window-header .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border-hover);
+    }
+
+    .terminal-window-header .dot:nth-child(1) { background: #FF5F56; }
+    .terminal-window-header .dot:nth-child(2) { background: #FFBD2E; }
+    .terminal-window-header .dot:nth-child(3) { background: #27C93F; }
+
+    .terminal-title {
+      margin-left: 8px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .terminal-content {
+      padding: 20px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .term-line {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .term-line .prompt {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .term-line .cmd {
+      color: var(--text-primary);
+    }
+
+    .term-line.output {
+      color: var(--text-dim);
+    }
+
+    .term-line .dim {
+      color: var(--text-dim);
+    }
+
+    .term-line .success {
+      color: var(--success);
+    }
+
+    .term-line .highlight {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .term-line .btn {
+      color: var(--accent);
+    }
+
+    .term-line .hash {
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .term-line .stat {
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .box-title, .box-line {
+      color: var(--text-muted);
+    }
+
+    .box-title {
+      color: var(--text-dim);
+    }
+
+    /* Terminal Block Legacy */
+    .terminal-block.legacy {
+      padding: 24px;
+    }
       overflow: hidden;
     }
 
@@ -517,17 +616,35 @@
     <section class="hero">
       <div class="container hero-content">
         <h1 class="hero-title">rte</h1>
-        <p class="hero-subtitle">Deterministic React-style rendering in the terminal</p>
+        <p class="hero-subtitle">Deterministic React rendering in the terminal</p>
 
-        <div class="terminal-block">
-          <div class="terminal-line">
-            <span class="terminal-prompt">$</span>
-            <span class="terminal-command">npm install -g @codeteck/rte</span>
+        <div class="terminal-block hero-terminal">
+          <div class="terminal-window-header">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="terminal-title">rte — live demo</span>
           </div>
-          <div class="terminal-line">
-            <span class="terminal-prompt">$</span>
-            <span class="terminal-command">rte dev</span>
-            <span class="cursor"></span>
+          <div class="terminal-content">
+            <div class="term-line"><span class="prompt">$</span><span class="cmd">rte dev examples/counter.tsx</span></div>
+            <div class="term-line output"><span class="dim">React Terminal Engine - Debug Mode</span></div>
+            <div class="term-line output"><span class="dim">Frames: 24 | Components: 4 | State: 2 | Deterministic: ✓</span></div>
+            <div class="term-line output"></div>
+            <div class="term-line output"><span class="box-title">┌─ Counter ───────────────────────</span></div>
+            <div class="term-line output"><span class="box-line">│</span></div>
+            <div class="term-line output"><span class="box-line">│  <span class="highlight">Count: 0</span></span></div>
+            <div class="term-line output"><span class="box-line">│</span></div>
+            <div class="term-line output"><span class="box-line">│  [<span class="btn">+</span>] [<span class="btn">-</span>]</span></div>
+            <div class="term-line output"><span class="box-title">└──────────────────────────────</span></div>
+            <div class="term-line output"></div>
+            <div class="term-line"><span class="prompt">$</span><span class="cmd">rte replay session.json --step 12</span></div>
+            <div class="term-line output"><span class="success">▶</span> Replaying frame 12/50 | Hash: <span class="hash">a8f3c291d2e4</span></div>
+            <div class="term-line output"><span class="dim">State: { count: 5 } | Render time: 8ms</span></div>
+            <div class="term-line output"></div>
+            <div class="term-line"><span class="prompt">$</span><span class="cmd">rte benchmark --scenario stress</span></div>
+            <div class="term-line output"><span class="success">✓</span> Render: <span class="stat">21ms avg</span> | FPS: <span class="stat">48.2</span> | Memory: <span class="stat">11MB</span></div>
+            <div class="term-line output"><span class="success">✓</span> All thresholds passed</div>
+            <div class="term-line"><span class="prompt">$</span><span class="cursor"></span></div>
           </div>
         </div>
       </div>
