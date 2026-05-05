@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Troubleshooting - rte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #0a0a0f; --bg-secondary: #12121a; --text: #e6edf3; --text-muted: #8b949e; --accent: #39c5cf; --border: #21262d; --green: #3fb950; --orange: #d29922; }
+    body { font-family: 'JetBrains Mono', monospace; background: var(--bg); color: var(--text); line-height: 1.7; padding: 2rem; max-width: 900px; margin: 0 auto; }
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
+    h1 { color: var(--accent); margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+    h2 { color: var(--orange); margin: 2rem 0 1rem; }
+    h3 { color: var(--green); margin: 1rem 0 0.5rem; }
+    code { background: var(--bg-secondary); padding: 0.2rem 0.4rem; border-radius: 4px; color: var(--accent); }
+    pre { background: var(--bg-secondary); padding: 1rem; border-radius: 8px; overflow-x: auto; margin: 1rem 0; border: 1px solid var(--border); }
+    pre code { background: none; padding: 0; color: var(--text); }
+    ul { margin: 1rem 0; padding-left: 1.5rem; }
+    li { margin: 0.5rem 0; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .nav { margin-bottom: 2rem; }
+    .nav a { margin-right: 1.5rem; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="index.html">← Home</a>
+    <a href="cli.html">CLI Reference</a>
+    <a href="architecture.html">Architecture</a>
+    <a href="troubleshooting.html">Troubleshooting</a>
+  </nav>
+
+  <h1>Troubleshooting</h1>
+
+  <h2>Installation Issues</h2>
+
+  <h3>"command not found" after global install</h3>
+  <p><strong>Cause:</strong> npm global bin not in PATH</p>
+  <p><strong>Solution:</strong></p>
+  <pre><code># Add to PATH (for zsh)
+echo 'export PATH="$PATH:$(npm config get prefix)/bin"' >> ~/.zshrc
+source ~/.zshrc
+
+# Or for bash
+echo 'export PATH="$PATH:$(npm config get prefix)/bin"' >> ~/.bashrc
+source ~/.bashrc</code></pre>
+  <p><strong>Alternative:</strong> Use npm exec:</p>
+  <pre><code>npm exec @codeteck/rte -- --version</code></pre>
+
+  <h3>npx shows "command not found"</h3>
+  <p><strong>Cause:</strong> npx resolves binary differently</p>
+  <p><strong>Solution:</strong></p>
+  <pre><code># Use npm exec instead
+npm exec @codeteck/rte -- --help
+
+# Or install globally first
+npm install -g @codeteck/rte</code></pre>
+
+  <h2>CLI Execution Issues</h2>
+
+  <h3>"Error: missing required argument"</h3>
+  <p><strong>Cause:</strong> Required argument not provided</p>
+  <p><strong>Solution:</strong></p>
+  <pre><code># Wrong
+rte dev
+
+# Correct
+rte dev my-component.tsx</code></pre>
+
+  <h3>"Error: Session file not found"</h3>
+  <p><strong>Cause:</strong> File path doesn't exist</p>
+  <p><strong>Solution:</strong> Check file path is correct</p>
+
+  <h3>"Error: Invalid session file: unable to parse JSON"</h3>
+  <p><strong>Cause:</strong> Session file is corrupted or not valid JSON</p>
+  <p><strong>Solution:</strong></p>
+  <ul>
+    <li>Check file contains valid JSON</li>
+    <li>Verify file wasn't truncated</li>
+    <li>Re-generate session with <code>rte dev --save-session</code></li>
+  </ul>
+
+  <h3>"Error: Unknown option"</h3>
+  <p><strong>Cause:</strong> Using invalid flag</p>
+  <p><strong>Solution:</strong> Check valid flags with --help</p>
+
+  <h2>Debug Mode</h2>
+  <p>Enable debug mode to see stack traces:</p>
+  <pre><code>rte --debug dev myfile.tsx
+rte --debug diff a.json b.json</code></pre>
+  <p>Debug output shows:</p>
+  <ul>
+    <li>Full stack traces</li>
+    <li>Internal error details</li>
+    <li>More verbose logging</li>
+  </ul>
+
+  <h2>NPM vs NPX vs Direct</h2>
+  <pre><code># npm exec (recommended for one-off)
+npm exec @codeteck/rte -- benchmark
+
+# npx (downloads if not cached)
+npx @codeteck/rte benchmark
+
+# Global install (requires PATH)
+npm install -g @codeteck/rte
+rte benchmark</code></pre>
+
+  <h2>Performance Issues</h2>
+
+  <h3>Benchmark runs slow</h3>
+  <p><strong>Cause:</strong> Large component trees or many frames</p>
+  <p><strong>Solution:</strong> Use smaller scenarios</p>
+  <pre><code>rte benchmark --scenario small  # 50 frames
+rte benchmark --scenario medium  # 100 frames</code></pre>
+
+  <h2>Getting Help</h2>
+  <ul>
+    <li>Enable debug mode: <code>rte --debug &lt;command&gt;</code></li>
+    <li>Check GitHub issues: https://github.com/Nom-nom-hub/rte/issues</li>
+    <li>Review CLI reference: <code>rte --help</code></li>
+  </ul>
+</body>
+</html>
