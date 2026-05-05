@@ -110,13 +110,13 @@
       <div class="issue-block">
         <div class="issue-title">"command not found" after global install</div>
         <div class="cause"><strong>Cause:</strong> npm global bin not in PATH</div>
-        <div class="solution"><strong>Solution:</strong></div>
+        <div class="solution"><strong>Solution:</strong> Add npm global bin to PATH or use npm exec</div>
       </div>
       <pre><code># Add to PATH (zsh)
 echo 'export PATH="$PATH:$(npm config get prefix)/bin"' >> ~/.zshrc
 source ~/.zshrc
 
-# Or use npm exec
+# Or use npm exec instead
 npm exec @codeteck/rte -- --version</code></pre>
 
       <div class="issue-block">
